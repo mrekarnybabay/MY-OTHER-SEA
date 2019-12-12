@@ -7,7 +7,7 @@ export const api = '/api/WorkerBoard/GetWorkersSchedule';
 // Настройки отображения
 export const countString = 5;
 export const displayTime = 10;  // в секундах
-export const twoWeek = false;
+export const twoWeek = true;
 export const fullWindow = false;
 
 export const requestFrequency = 3600 // в секундах
