@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Axios from 'axios';
-import {host, api, GUID, BoardID, twoWeek} from './config'
+import {host, api, GUID, BoardID, twoWeek, deleteEmptyStrings} from './config'
 
 // TODO: Исправить на function
 class Thead extends React.Component {
@@ -150,6 +150,10 @@ class TrDoctors extends React.Component {
     }
 
     render() {
+        // TODO: СДЕЛАТЬ УДАЛЕНИЕ ПУСТЫХ СТРОК + РЕФРАКТОРИНГ КОДА
+        if (deleteEmptyStrings && this.isEmptyString()) {
+            return ('');
+        }
         return (
             <tr>
                 <td>{this.getName()}</td>
