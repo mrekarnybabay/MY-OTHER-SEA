@@ -3,6 +3,7 @@ import './App.css';
 import Axios from 'axios';
 import {host, api, GUID, BoardID, twoWeek} from './config'
 
+// TODO: Исправить на function
 class Thead extends React.Component {
     render() {
         if (this.props.beginDate === null) {
@@ -76,30 +77,30 @@ class TrDoctors extends React.Component {
         let hours = time.getHours().toString();
         let minuts = time.getMinutes().toString();
 
-        if (hours.length < 2){
+        if (hours.length < 2) {
             hours = '0' + hours;
         }
-        if(minuts.length < 2){
+        if (minuts.length < 2) {
             minuts = '0' + minuts;
         }
 
-        return(
+        return (
             hours + ':' + minuts
         );
     }
     getShedule = () => {
-        if (this.props.doctor.Shedule.length === 0) {
-            return (
-                Array.apply(null, {length: 6}).map(item => {
-                    return (
-                        <td>
-                        </td>
-                    )
-                })
-            );
-        }
         let dates;
         if (twoWeek) {
+            if (this.props.doctor.Shedule.length === 0) {
+                return (
+                    Array.apply(null, {length: 13}).map(item => {
+                        return (
+                            <td>
+                            </td>
+                        )
+                    })
+                );
+            }
             dates = new Array(13).fill(null);
             this.props.doctor.Shedule.map((item, index) => {
                 let date = new Date(item.Date);
@@ -111,10 +112,20 @@ class TrDoctors extends React.Component {
                 }
             });
         } else {
+            if (this.props.doctor.Shedule.length === 0) {
+                return (
+                    Array.apply(null, {length: 6}).map(item => {
+                        return (
+                            <td>
+                            </td>
+                        )
+                    })
+                );
+            }
             dates = new Array(6).fill(null);
             this.props.doctor.Shedule.map((item, index) => {
-                item = new Date(item.Date);
-                let delta = item.getDate() - this.props.beginDate.getDate();
+                let date = new Date(item.Date);
+                let delta = date.getDate() - this.props.beginDate.getDate();
                 if (delta < 6) {
                     dates[delta] = item;
                 }
@@ -144,6 +155,41 @@ class TrDoctors extends React.Component {
                 <td>{this.getName()}</td>
                 {this.getShedule()}
             </tr>
+        );
+    }
+}
+
+class Tbody extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+
+    render() {
+        return (
+            <tbody>
+            {
+                Object.keys(this.props.doctors).map(item => {
+                    return (
+                        <React.Fragment>
+                            <TrCategory
+                                categoryName={item}
+                            />
+                            {
+                                this.props.doctors[item].map((doctor, index) => {
+                                    return (
+                                        <TrDoctors
+                                            doctor={doctor}
+                                            beginDate={this.props.beginDate}
+                                        />
+                                    )
+                                })
+                            }
+                        </React.Fragment>
+                    )
+                })
+            }
+            </tbody>
         );
     }
 }
@@ -272,37 +318,10 @@ class App extends React.Component {
                     <Thead
                         beginDate={this.state.beginDate}
                     />
-                    <tbody>
-                    <TrCategory
-                        categoryName={'ЛОР'}
-                    />
-
-                    <TrDoctors
-                        doctor={this.state.doctors['ЛОР'][0]}
+                    <Tbody
                         beginDate={this.state.beginDate}
+                        doctors={this.state.doctors}
                     />
-                    <tr>
-                        <td>Иванов И.И.</td>
-                        <td>
-                            <p>08:00</p>
-                            <p>12:00</p>
-                        </td>
-                        <td>
-                            <p>08:00</p>
-                            <p>12:00</p>
-                        </td>
-                        <td>
-                            <p>08:00</p>
-                            <p>12:00</p>
-                        </td>
-                        <td></td>
-                        <td>
-                            <p>08:00</p>
-                            <p>12:00</p>
-                        </td>
-                        <td></td>
-                    </tr>
-                    </tbody>
                 </table>
             );
         } else {

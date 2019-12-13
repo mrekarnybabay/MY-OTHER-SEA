@@ -9,5 +9,6 @@ export const countString = 5;
 export const displayTime = 10;  // в секундах
 export const twoWeek = true;
 export const fullWindow = false;
+export const deleteEmptyStrings = true;
 
 export const requestFrequency = 3600 // в секундах
