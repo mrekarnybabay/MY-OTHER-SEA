@@ -5,10 +5,7 @@ export const host = 'http://localhost:12348';
 export const api = '/api/WorkerBoard/GetWorkersSchedule';
 
 // Настройки отображения
-export const countString = 5;
-export const displayTime = 10;  // в секундах
+export const countString = 6;
+export const displayTime = 5000;
 export const twoWeek = true;
-export const fullWindow = false;
-export const deleteEmptyStrings = true;
-
-export const requestFrequency = 3600 // в секундах
+export const deleteEmptyStrings = false;
