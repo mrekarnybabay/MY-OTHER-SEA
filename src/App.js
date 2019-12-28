@@ -1,196 +1,31 @@
 import React from 'react';
-import './App.css';
 import Axios from 'axios';
-import Table from 'react-bootstrap/Table';
-import Carousel from 'react-bootstrap/Carousel';
-import CarouselItem from 'react-bootstrap/CarouselItem';
+import './App.css'
 
-import {Router, Switch} from "react-router";
-import {host, api, GUID, BoardID, twoWeek, deleteEmptyStrings, countString, displayTime} from './config';
-
-function Thead(props) {
-    return (
-        <thead>
-        <tr>
-            <th ск='col'/>
-            {
-                Array.apply(null, {length: 14}).map((item, index) => {
-                    item = new Date();
-                    item.setDate(props.beginDate.getDate() + index);
-                    return (
-                        <th key={index} scope='col'>
-                            <div className={"date"}>
-                                {
-                                    item.toLocaleString(
-                                        'ru', {
-                                            year: 'numeric',
-                                            month: 'numeric',
-                                            day: 'numeric',
-                                        }
-                                    )
-                                }
-                            </div>
-                        </th>
-                    )
-                })
-            }
-        </tr>
-        </thead>
-    );
-}
-
-class TrDoctors extends React.Component {
-    getName = () => {
-        return this.props.doctor.Surname + ' ' + this.props.doctor.Name + ' ' + this.props.doctor.Patronimic;
-    }
-    getTime = (timeString) => {
-        let time = new Date(timeString);
-        let hours = time.getHours().toString();
-        let minuts = time.getMinutes().toString();
-
-        if (hours.length < 2) {
-            hours = '0' + hours;
-        }
-        if (minuts.length < 2) {
-            minuts = '0' + minuts;
-        }
-
-        return (
-            hours + ':' + minuts
-        );
-    }
-    getShedule = () => {
-        let dates;
-        if (this.props.doctor.Shedule.length === 0) {
-            return (
-                Array.apply(null, {length: 14}).map(item => {
-                    return (
-                        <td className={"td-row"}>
-                        </td>
-                    )
-                })
-            );
-        }
-
-        dates = new Array(14).fill(null).map(item => {
-            return item = []
-        });
-
-        this.props.doctor.Shedule.map((item, index) => {
-            let date = new Date(item.Date);
-            let delta = (date - this.props.beginDate) / 1000 / 60 / 60 / 24;
-
-            dates[delta].push(item);
-        });
-        return (
-            dates.map(item => {
-                    if (item !== null) {
-                        return (
-                            <td className={"td-row"}>
-                                <div className={"td-shedule-doctor"}>
-                                    {
-                                        item.map(date => {
-                                            return (<p>{this.getTime(date.BeginTime)} - {this.getTime(date.EndTime)}</p>);
-                                        })
-                                    }
-                                </div>
-                            </td>
-                        )
-                    } else {
-                        return (<td className={"td-row"}/>);
-                    }
-                }
-            )
-        );
-    }
-
-    render() {
-        if (deleteEmptyStrings && this.props.doctor.Shedule.length === 0) {
-            return null;
-        }
-
-        if (twoWeek) {
-            return (
-                <tr>
-                    <td>
-                        <div className={"td-row td-name-doctor"}><p className={""}>{this.getName()}</p></div>
-                    </td>
-                    {this.getShedule()}
-                </tr>
-            );
-        } else {
-            return (
-                <tr>
-                    <td>
-                        <div className={"td-row td-name-doctor"}><p className={""}>{this.getName()}</p></div>
-                    </td>
-                    {this.getShedule()}
-                </tr>
-            );
-        }
-    }
-}
-
-function Tbody(props) {
-    return (
-        <tbody>
-        {
-            Object.keys(props.doctors).map(item => {
-                return (
-                    <React.Fragment>
-                        <TrCategory
-                            categoryName={item}
-                        />
-                        {
-                            props.doctors[item].map((doctor) => {
-                                return (
-                                    <TrDoctors
-                                        doctor={doctor}
-                                        beginDate={props.beginDate}
-                                    />
-                                )
-                            })
-                        }
-                    </React.Fragment>
-                )
-            })
-        }
-        </tbody>
-    );
-}
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
-function TrCategory(props) {
-    return (
-        <tr>
-            <th className={"td-row"}>
-                <div className={"td-name-category"}><p className={"h5"}>{props.categoryName}</p></div>
-            </th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-            <th className={"td-row"}></th>
-        </tr>
-    );
-}
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+import Table from 'react-bootstrap/Table'
+
+import type from './const';
+import { host, api, GUID, BoardID, countString, displayTime } from './config';
+
+import Tbody from './Components/Tbody'
+import Thead from './Components/Thead'
 
 
+
+// TODO: Рефакторинг методов класса 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             doctors: null,
-            beginDate: null
+            beginDate: null,
+            typeStyle: type.newStyle
         }
         this.request(this.response);
     }
@@ -247,9 +82,8 @@ class App extends React.Component {
             }
         }
         console.log('Сгруппированные врачи', categories);
-        this.packDoctors(categories);
         this.setState({
-            doctors: this.packDoctors(categories)
+            doctors: this.packDoctors(categories, this.state.typeStyle)
         });
     }
     sortCategories = (categories) => {
@@ -269,43 +103,75 @@ class App extends React.Component {
         return array;
 
     }
-    packDoctors = (categories) => {
-        //debugger;
+    packDoctors = (categories, typeStyle) => {
         let packs = [];
         let curIndex = 0;
         let curCount = 0;
         let array = this.sortCategories(categories);
         packs.push([]);
-        for (let k in array) {
-            let key = array[k];
-            for (let i = 0; i < categories[key].length; i++) {
-                if (packs[curIndex][key]) {
-                    if (curCount < countString) {
-                        packs[curIndex][key].push(categories[key][i]);
-                        curCount++;
+        debugger;
+
+        if (typeStyle === type.twoWeek || typeStyle === type.oneWeek) {
+            for (let k in array) {
+                let key = array[k];
+                for (let i = 0; i < categories[key].length; i++) {
+                    if (packs[curIndex][key]) {
+                        if (curCount < countString) {
+                            packs[curIndex][key].push(categories[key][i]);
+                            curCount++;
+                        } else {
+                            packs.push([]);
+                            curIndex++;
+                            packs[curIndex][key] = [];
+                            packs[curIndex][key].push(categories[key][i])
+                            curCount = 2;
+                        }
                     } else {
-                        packs.push([]);
-                        curIndex++;
-                        packs[curIndex][key] = [];
-                        packs[curIndex][key].push(categories[key][i])
-                        curCount = 2;
+                        if (curCount + 2 <= countString) {
+                            packs[curIndex][key] = [];
+                            packs[curIndex][key].push(categories[key][i])
+                            curCount += 2;
+                        } else {
+                            packs.push([]);
+                            curIndex++;
+                            packs[curIndex][key] = [];
+                            packs[curIndex][key].push(categories[key][i])
+                            curCount = 2;
+                        }
                     }
-                } else {
-                    if (curCount + 2 <= countString) {
-                        packs[curIndex][key] = [];
-                        packs[curIndex][key].push(categories[key][i])
-                        curCount += 2;
+                }
+            }
+        } else if (typeStyle === type.newStyle) {
+            for (let k in array) {
+                let key = array[k];
+                for (let i = 0; i < categories[key].length; i++) {
+                    if (packs[curIndex][key]) {
+                        if (curCount < countString) {
+                            packs[curIndex][key].push(categories[key][i]);
+                            curCount++;
+                        } else {
+                            packs.push([]);
+                            curIndex++;
+                            packs[curIndex][key] = [];
+                            packs[curIndex][key].push(categories[key][i])
+                            curCount = 2;
+                        }
                     } else {
-                        packs.push([]);
-                        curIndex++;
-                        packs[curIndex][key] = [];
-                        packs[curIndex][key].push(categories[key][i])
-                        curCount = 2;
+                        if (curCount + 2 <= countString) {
+                            packs[curIndex][key] = [];
+                            packs[curIndex][key].push(categories[key][i])
+                            curCount += 2;
+                        } else {
+                            packs.push([]);
+                            curIndex++;
+                            packs[curIndex][key] = [];
+                            packs[curIndex][key].push(categories[key][i])
+                            curCount = 2;
+                        }
                     }
                 }
             }
         }
-        console.log(packs);
         return (packs);
     }
     searchMinDate = (date) => {
@@ -317,32 +183,197 @@ class App extends React.Component {
             });
         }
     }
+    forcedСrutch = (array) => {
+        let crutch = [];
+        array.map(item => {
+            crutch.push(item);
+            crutch.push(item);
+            return item;
+        });
+        return crutch;
+    }
 
     render() {
         if (this.state.doctors !== null) {
             return (
-                <Carousel interval={displayTime}>
-                    {this.state.doctors.map(item => {
-                        return (
-                            <CarouselItem>
-                                <Table bordered>
-                                    <Thead
-                                        beginDate={this.state.beginDate}
-                                    />
-                                    <Tbody
-                                        beginDate={this.state.beginDate}
-                                        doctors={item}
-                                    />
-                                </Table>
-                            </CarouselItem>
+                <Router>
+                    <Switch>
+                        <Route path="/two-week">
+                            <div className={'twoo-week'}>
+                                <Carousel arrows={false} responsive={{
+                                    superLargeDesktop: {
+                                        // the naming can be any, depends on you.
+                                        breakpoint: { max: 4000, min: 3000 },
+                                        items: 5,
+                                    },
+                                    desktop: {
+                                        breakpoint: { max: 3000, min: 1024 },
+                                        items: 1,
+                                    },
+                                    tablet: {
+                                        breakpoint: { max: 1024, min: 464 },
+                                        items: 2,
+                                    },
+                                    mobile: {
+                                        breakpoint: { max: 464, min: 0 },
+                                        items: 1,
+                                    },
+                                }}>
+                                    {this.state.doctors.map(item => {
+                                        return (
+                                            <div>
+                                                <Table bordered>
+                                                    <Thead
+                                                        type={type.twoWeek}
+                                                        beginDate={this.state.beginDate}
+                                                    />
+                                                    <Tbody
+                                                        id={null}
+                                                        type={type.twoWeek}
+                                                        beginDate={this.state.beginDate}
+                                                        doctors={item}
+                                                    />
+                                                </Table>
+                                            </div>
+                                        );
+                                    })}
 
-                        )
-                    })}
+                                </Carousel>
+                            </div>
+                        </Route>
+                        <Route path="/one-week">
+                            <div className={'one-week'}>
+                                <Carousel autoPlaySpeed={1000} autoPlay={true} arrows={false} responsive={{
+                                    superLargeDesktop: {
+                                        // the naming can be any, depends on you.
+                                        breakpoint: { max: 4000, min: 3000 },
+                                        items: 5,
+                                    },
+                                    desktop: {
+                                        breakpoint: { max: 3000, min: 1024 },
+                                        items: 1,
+                                    },
+                                    tablet: {
+                                        breakpoint: { max: 1024, min: 464 },
+                                        items: 2,
+                                    },
+                                    mobile: {
+                                        breakpoint: { max: 464, min: 0 },
+                                        items: 1,
+                                    },
+                                }}>
+                                    {this.forcedСrutch(this.state.doctors).map((item, index) => {
+                                        if (index % 2 === 0) {
+                                            return (
+                                                <div>
+                                                    <Table bordered>
+                                                        <Thead
+                                                            id={1}
+                                                            type={type.oneWeek}
+                                                            beginDate={this.state.beginDate}
+                                                        />
+                                                        <Tbody
+                                                            id={1}
+                                                            type={type.oneWeek}
+                                                            beginDate={this.state.beginDate}
+                                                            doctors={item}
+                                                        />
+                                                    </Table>
+                                                </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div>
+                                                    <Table bordered>
+                                                        <Thead
+                                                            id={2}
+                                                            type={type.oneWeek}
+                                                            beginDate={this.state.beginDate}
+                                                        />
+                                                        <Tbody
+                                                            id={2}
+                                                            type={type.oneWeek}
+                                                            beginDate={this.state.beginDate}
+                                                            doctors={item}
+                                                        />
+                                                    </Table>
+                                                </div>
+                                            )
+                                        }
 
-                </Carousel>
+                                    })}
+
+                                </Carousel>
+                            </div>
+                        </Route>
+                        <Route path="/new-style">
+                            <div>
+                                <Carousel  infinite={true} autoPlaySpeed={displayTime} autoPlay={true} arrows={false} responsive={{
+                                    superLargeDesktop: {
+                                        // the naming can be any, depends on you.
+                                        breakpoint: { max: 4000, min: 3000 },
+                                        items: 5,
+                                    },
+                                    desktop: {
+                                        breakpoint: { max: 3000, min: 1024 },
+                                        items: 1,
+                                    },
+                                    tablet: {
+                                        breakpoint: { max: 1024, min: 464 },
+                                        items: 2,
+                                    },
+                                    mobile: {
+                                        breakpoint: { max: 464, min: 0 },
+                                        items: 1,
+                                    },
+                                }}>
+                                    {this.forcedСrutch(this.state.doctors).map((item, index) => {
+                                        if (index % 2 === 0) {
+                                            return (
+                                                <div>
+                                                    <Table bordered>
+                                                        <Thead
+                                                            id={1}
+                                                            type={type.newStyle}
+                                                            beginDate={this.state.beginDate}
+                                                        />
+                                                        <Tbody
+                                                            id={1}
+                                                            type={type.newStyle}
+                                                            beginDate={this.state.beginDate}
+                                                            doctors={item}
+                                                        />
+                                                    </Table>
+                                                </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className={'new-style'}>
+                                                    <Table bordered>
+                                                        <Thead
+                                                            id={2}
+                                                            type={type.newStyle}
+                                                            beginDate={this.state.beginDate}
+                                                        />
+                                                        <Tbody
+                                                            id={2}
+                                                            type={type.newStyle}
+                                                            beginDate={this.state.beginDate}
+                                                            doctors={item}
+                                                        />
+                                                    </Table>
+                                                </div>
+                                            )
+                                        }
+                                    })}
+
+                                </Carousel>
+                            </div>
+                        </Route>
+                    </Switch>
+                </Router>
             );
-        }
-        else{
+        } else {
             return null;
         }
     }
