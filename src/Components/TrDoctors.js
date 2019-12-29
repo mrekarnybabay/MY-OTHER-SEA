@@ -86,7 +86,7 @@ export class TrDoctors extends React.Component {
             dates.map(item => {
                 if (item !== null) {
                     return (
-                        <td className={"td-row"}>
+                        <td>
                             <div className={"td-shedule-doctor"}>
                                 {
                                     item.map(date => {
@@ -97,7 +97,7 @@ export class TrDoctors extends React.Component {
                         </td>
                     )
                 } else {
-                    return (<td className={"td-row"} />);
+                    return (<td/>);
                 }
             }
             )
@@ -118,7 +118,7 @@ export class TrDoctors extends React.Component {
             return (
                 <tr>
                     <td>
-                        <div className={"td-row td-name-doctor"}><p className={""}>{this.getName()}</p></div>
+                        <div className={"td-name-doctor"}><p>{this.getName()}</p></div>
                     </td>
                     {this.getShedule()}
                 </tr>
@@ -127,10 +127,10 @@ export class TrDoctors extends React.Component {
             return (
                 <tr>
                     <td>
-                        <div className={"td-row td-name-doctor"}><p className={""}>{this.getName()}</p></div>
+                        <div className={"td-name-doctor"}><p>{this.getName()}</p></div>
                     </td>
                     <td>
-                        <div className={"td-row td-name-doctor"}><p className={""}>{this.props.categoryName}</p></div>
+                        <div className={"td-name-doctor"}><p>{this.props.categoryName}</p></div>
                     </td>
                     {this.getShedule()}
                 </tr>
