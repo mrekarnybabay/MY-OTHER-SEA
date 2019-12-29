@@ -25,7 +25,6 @@ class App extends React.Component {
         this.state = {
             doctors: null,
             beginDate: null,
-            typeStyle: type.newStyle
         }
         this.request(this.response);
     }
@@ -41,7 +40,6 @@ class App extends React.Component {
             .then(function (response) {
                 console.log('Получил ответ', response);
                 responseFunction(response.data);
-                //groupingDoctors();
             })
             .catch(function (error) {
                 console.log('Ошибка! Не могу связаться с API. ' + error);
@@ -83,7 +81,7 @@ class App extends React.Component {
         }
         console.log('Сгруппированные врачи', categories);
         this.setState({
-            doctors: this.packDoctors(categories, this.state.typeStyle)
+            doctors: categories
         });
     }
     sortCategories = (categories) => {
@@ -142,6 +140,7 @@ class App extends React.Component {
                 }
             }
         } else if (typeStyle === type.newStyle) {
+            curCount = 0;
             for (let k in array) {
                 let key = array[k];
                 for (let i = 0; i < categories[key].length; i++) {
@@ -154,19 +153,19 @@ class App extends React.Component {
                             curIndex++;
                             packs[curIndex][key] = [];
                             packs[curIndex][key].push(categories[key][i])
-                            curCount = 2;
+                            curCount = 1;
                         }
                     } else {
-                        if (curCount + 2 <= countString) {
+                        if (curCount + 1 <= countString) {
                             packs[curIndex][key] = [];
                             packs[curIndex][key].push(categories[key][i])
-                            curCount += 2;
+                            curCount ++;
                         } else {
                             packs.push([]);
                             curIndex++;
                             packs[curIndex][key] = [];
                             packs[curIndex][key].push(categories[key][i])
-                            curCount = 2;
+                            curCount = 1;
                         }
                     }
                 }
@@ -219,7 +218,7 @@ class App extends React.Component {
                                         items: 1,
                                     },
                                 }}>
-                                    {this.state.doctors.map(item => {
+                                    {this.packDoctors(this.state.doctors, type.twoWeek).map(item => {
                                         return (
                                             <div>
                                                 <Table bordered>
@@ -262,7 +261,7 @@ class App extends React.Component {
                                         items: 1,
                                     },
                                 }}>
-                                    {this.forcedСrutch(this.state.doctors).map((item, index) => {
+                                    {this.forcedСrutch(this.packDoctors(this.state.doctors, type.oneWeek)).map((item, index) => {
                                         if (index % 2 === 0) {
                                             return (
                                                 <div>
@@ -307,8 +306,8 @@ class App extends React.Component {
                             </div>
                         </Route>
                         <Route path="/new-style">
-                            <div>
-                                <Carousel  infinite={true} autoPlaySpeed={displayTime} autoPlay={true} arrows={false} responsive={{
+                            <div className={'new-style'}>
+                                <Carousel infinite={true} autoPlaySpeed={displayTime} autoPlay={true} arrows={false} responsive={{
                                     superLargeDesktop: {
                                         // the naming can be any, depends on you.
                                         breakpoint: { max: 4000, min: 3000 },
@@ -327,7 +326,7 @@ class App extends React.Component {
                                         items: 1,
                                     },
                                 }}>
-                                    {this.forcedСrutch(this.state.doctors).map((item, index) => {
+                                    {this.forcedСrutch(this.packDoctors(this.state.doctors, type.newStyle)).map((item, index) => {
                                         if (index % 2 === 0) {
                                             return (
                                                 <div>
