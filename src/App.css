@@ -1,33 +1,50 @@
-html{
-    font-size: 36px;
+body {
+  font-size: 36px;
+  line-height: 1.2 !important;
 }
-th{
-    padding: 0px !important;
+th {
+  padding: 0px !important;
 }
-p{
-    margin: 0px;
+p {
+  margin: 0px;
 }
-td{
-    padding: 0px !important;
+td {
+  padding: 0px !important;
 }
 
-.date{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    font-size: 24px;
+.h5 {
+  font-size: 26px;
+  margin: 0px !important;
 }
-.td-shedule-doctor{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.td-row {
+  height: 40px !important;
 }
-.td-name-doctor{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+.date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  font-size: 24px;
 }
-.td-name-category{
-    padding-left: 50px !important;
+.td-shedule-doctor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  padding: 3px 0px 3px 0px;
+}
+.td-name-doctor {
+  display: flex;
+  justify-content: center;
+  padding: 3px 0px 3px 0px;
+}
+.td-name-category {
+  padding-left: 50px !important;
+  padding: 3px 0px 3px 0px;
+}
+
+.table td {
+  vertical-align: middle;
 }
