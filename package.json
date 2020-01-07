@@ -13,7 +13,8 @@
     "react-multi-carousel": "^2.5.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.0"
+    "react-scripts": "3.3.0",
+    "yarn": "^1.21.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -35,5 +36,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Successful-Rosemary/house.git"
+  },
+  "author": "rosemary",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Successful-Rosemary/house/issues"
+  },
+  "homepage": "https://github.com/Successful-Rosemary/house#readme"
 }

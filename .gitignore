@@ -21,3 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+API/output.txt
+API/Newtonsoft.Json.dll
+API/Nancy.Hosting.Self.dll
+API/Nancy.dll
+API/ElectronicQueueCommon.dll
+API/DoctorsBoardApi.exe.config
+API/DoctorsBoardApi.exe
