@@ -1,85 +1,33 @@
-.two-week .td-row {
-    height: 150px !important;
-}
-
-.two-week .td-name-category {
-    width: 225px;
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.two-week .td-name-doctor {
-    width: 225px;
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.two-week .td-shedule-doctor {
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.two-week .td-row {
-    padding: 0 0 0 0 !important;
-}
-
-
-
-/*Общие правила для всех стилей*/
-html {
-    
-}
-body{
-    font-size: 20px;
+html{
+    font-size: 36px;
 }
 th{
-    height: 75px;
     padding: 0px !important;
-    margin: 0px !important;
+}
+p{
+    margin: 0px;
 }
 td{
-    height: 143px !important;
-    padding: 0px !important;
-    margin: 0px !important;
-}
-.table {
-    margin: 0px !important;
     padding: 0px !important;
 }
-.date{
-    height: 75px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
-    padding: 0px;
-    margin: 0px;
+.date{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
     font-size: 24px;
 }
-.td-name-doctor{
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-direction: column;
-}
 .td-shedule-doctor{
-    height: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
-
-    flex-direction: column;
+    align-items: center;
+}
+.td-name-doctor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.td-name-category{
+    padding-left: 50px !important;
 }
