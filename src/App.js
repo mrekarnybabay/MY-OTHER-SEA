@@ -1,6 +1,5 @@
 import React from "react";
 import Axios from "axios";
-import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -14,6 +13,7 @@ import { host, api, GUID, BoardID, countString, displayTime } from "./config";
 
 import Tbody from "./Components/Tbody";
 import Thead from "./Components/Thead";
+import "./App.css";
 
 // TODO: Рефакторинг методов класса
 class App extends React.Component {

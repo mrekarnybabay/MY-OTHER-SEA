@@ -103,7 +103,7 @@ export class TrDoctors extends React.Component {
     if (this.props.type === type.twoWeek) {
       return (
         <tr>
-          <td>
+          <td className={"Ты-хуйло-блять"}>
             <div className={"td-row td-name-doctor"}>
               <p className={""}>{this.getName()}</p>
             </div>
@@ -114,7 +114,7 @@ export class TrDoctors extends React.Component {
     } else if (this.props.type === type.oneWeek) {
       return (
         <tr>
-          <td>
+          <td className={"Ты-хуйло-блять"}>
             <div className={"td-name-doctor"}>
               <p>{this.getName()}</p>
             </div>

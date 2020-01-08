@@ -1,5 +1,12 @@
+html {
+  overflow-y: hidden;
+  color: hsl(0, 0%, 10%);
+}
+* {
+  user-select: none;
+}
 body {
-  font-size: 36px;
+  font-size: 32px;
   line-height: 1.2 !important;
 }
 th {
@@ -10,22 +17,26 @@ p {
 }
 td {
   padding: 0px !important;
+  box-sizing: border-box;
 }
 
 .h5 {
   font-size: 26px;
   margin: 0px !important;
+  font-weight: 600;
 }
 .td-row {
   height: 40px !important;
+  background-color: #f5f5f5;
 }
 
 .date {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 48px;
-  font-size: 24px;
+  height: 58px;
+  font-size: 28px;
+  font-weight: 600;
 }
 .td-shedule-doctor {
   display: flex;
@@ -33,18 +44,27 @@ td {
   align-items: center;
   flex-wrap: nowrap;
   flex-direction: column;
-  padding: 3px 0px 3px 0px;
+  padding: 20px 12px 20px 12px;
+  font-size: 1em;
+  min-width: 220px;
+  max-width: 225px;
 }
 .td-name-doctor {
   display: flex;
-  justify-content: center;
-  padding: 3px 0px 3px 0px;
+  justify-content: left;
+  margin-left: 15px;
+  padding: 20px 0px 20px 0px;
 }
 .td-name-category {
-  padding-left: 50px !important;
+  margin-left: 30px;
   padding: 3px 0px 3px 0px;
 }
 
 .table td {
   vertical-align: middle;
+}
+
+.Ты-хуйло-блять {
+  min-width: 320px !important;
+  max-width: 350px;
 }
