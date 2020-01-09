@@ -1,5 +1,4 @@
 import React from "react";
-import type from "../const";
 
 function Thead(props) {
   return (
