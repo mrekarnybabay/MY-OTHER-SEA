@@ -15,7 +15,6 @@ import Tbody from "./Components/Tbody";
 import Thead from "./Components/Thead";
 import "./App.css";
 
-// TODO: Рефакторинг методов класса
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -42,6 +41,7 @@ class App extends React.Component {
         console.log("Ошибка! Не могу связаться с API. " + error);
       });
   };
+
   response = doctors => {
     this.groupingDoctors(doctors);
   };
@@ -76,11 +76,11 @@ class App extends React.Component {
         }
       }
     }
-    console.log("Сгруппированные врачи", categories);
     this.setState({
       doctors: categories
     });
   };
+
   sortCategories = categories => {
     let array = [];
     for (let key in categories) {
@@ -97,79 +97,7 @@ class App extends React.Component {
     }
     return array;
   };
-  packDoctors = (categories, typeStyle) => {
-    let packs = [];
-    let curIndex = 0;
-    let curCount = 0;
-    let array = this.sortCategories(categories);
-    packs.push([]);
-    debugger;
 
-    if (typeStyle === type.twoWeek || typeStyle === type.oneWeek) {
-      for (let k in array) {
-        let key = array[k];
-        for (let i = 0; i < categories[key].length; i++) {
-          if (packs[curIndex][key]) {
-            if (curCount < countString) {
-              packs[curIndex][key].push(categories[key][i]);
-              curCount++;
-            } else {
-              packs.push([]);
-              curIndex++;
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount = 2;
-            }
-          } else {
-            if (curCount + 2 <= countString) {
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount += 2;
-            } else {
-              packs.push([]);
-              curIndex++;
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount = 2;
-            }
-          }
-        }
-      }
-    } else if (typeStyle === type.newStyle) {
-      curCount = 0;
-      for (let k in array) {
-        let key = array[k];
-        for (let i = 0; i < categories[key].length; i++) {
-          if (packs[curIndex][key]) {
-            if (curCount < countString) {
-              packs[curIndex][key].push(categories[key][i]);
-              curCount++;
-            } else {
-              packs.push([]);
-              curIndex++;
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount = 1;
-            }
-          } else {
-            if (curCount + 1 <= countString) {
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount++;
-            } else {
-              packs.push([]);
-              curIndex++;
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount = 1;
-            }
-          }
-        }
-      }
-    }
-    console.log(packs);
-    return packs;
-  };
   heightString = (doctor) => {
     let maxRepeat = 1;
 
@@ -182,14 +110,15 @@ class App extends React.Component {
           countRepeat++;
         }
       }
-      if(maxRepeat < countRepeat){
+      if (maxRepeat < countRepeat) {
         maxRepeat = countRepeat;
       }
     }
     doctor.height = maxRepeat * 38 + 40;
     return maxRepeat * 38 + 40;
   }
-  newPackDoctors = (categories, typeStyle) => {
+
+  packDoctors = (categories) => {
     let packs = [];
     let curIndex = 0;
     let curCount = 0;
@@ -200,67 +129,34 @@ class App extends React.Component {
     packs.push([]);
     curHeight = 60;
 
-    if (typeStyle === type.twoWeek || typeStyle === type.oneWeek) {
-      for (let k in array) {
-        let key = array[k];
-        for (let i = 0; i < categories[key].length; i++) {
-          if (packs[curIndex][key]) {
-            if (curHeight + this.heightString(categories[key][i]) < height) {
-              packs[curIndex][key].push(categories[key][i]);
-              curCount++;
-              curHeight += this.heightString(categories[key][i]);
-            } else {
-              curHeight = 60 + 40;
-              packs.push([]);
-              curIndex++;
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curHeight += this.heightString(categories[key][i]);
-            }
+    for (let k in array) {
+      let key = array[k];
+      for (let i = 0; i < categories[key].length; i++) {
+        if (packs[curIndex][key]) {
+          if (curHeight + this.heightString(categories[key][i]) < height) {
+            packs[curIndex][key].push(categories[key][i]);
+            curCount++;
+            curHeight += this.heightString(categories[key][i]);
           } else {
-            if (curHeight + this.heightString(categories[key][i]) + 40 <= height) {
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curHeight += this.heightString(categories[key][i]) + 40;
-            } else {
-              packs.push([]);
-              curIndex++;
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curHeight = 60 + 40;
-              curHeight += this.heightString(categories[key][i]);
-            }
+            curHeight = 60 + 40;
+            packs.push([]);
+            curIndex++;
+            packs[curIndex][key] = [];
+            packs[curIndex][key].push(categories[key][i]);
+            curHeight += this.heightString(categories[key][i]);
           }
-        }
-      }
-    } else if (typeStyle === type.newStyle) {
-      curCount = 0;
-      for (let k in array) {
-        let key = array[k];
-        for (let i = 0; i < categories[key].length; i++) {
-          if (packs[curIndex][key]) {
-            if (curCount < countString) {
-              packs[curIndex][key].push(categories[key][i]);
-              curCount++;
-            } else {
-              packs.push([]);
-              curIndex++;
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount = 1;
-            }
+        } else {
+          if (curHeight + this.heightString(categories[key][i]) + 40 <= height) {
+            packs[curIndex][key] = [];
+            packs[curIndex][key].push(categories[key][i]);
+            curHeight += this.heightString(categories[key][i]) + 40;
           } else {
-            if (curCount + 1 <= countString) {
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount++;
-            } else {
-              packs.push([]);
-              curIndex++;
-              packs[curIndex][key] = [];
-              packs[curIndex][key].push(categories[key][i]);
-              curCount = 1;
-            }
+            packs.push([]);
+            curIndex++;
+            packs[curIndex][key] = [];
+            packs[curIndex][key].push(categories[key][i]);
+            curHeight = 60 + 40;
+            curHeight += this.heightString(categories[key][i]);
           }
         }
       }
@@ -268,220 +164,92 @@ class App extends React.Component {
     console.log(packs);
     return packs;
   };
+
   searchMinDate = date => {
     let newDate = new Date(date);
     let beginDate = this.state.beginDate;
+
     if (beginDate === null || beginDate > newDate) {
       this.setState({
         beginDate: newDate
       });
     }
   };
+
   forcedСrutch = array => {
     let crutch = [];
+
     array.map(item => {
       crutch.push(item);
       crutch.push(item);
       return item;
     });
+
     return crutch;
   };
 
   render() {
     if (this.state.doctors !== null) {
       return (
-        <Router>
-          <Switch>
-            <Route path="/two-week">
-              <div className={"twoo-week"}>
-                <Carousel
-                  arrows={false}
-                  responsive={{
-                    superLargeDesktop: {
-                      // the naming can be any, depends on you.
-                      breakpoint: { max: 4000, min: 3000 },
-                      items: 5
-                    },
-                    desktop: {
-                      breakpoint: { max: 3000, min: 1024 },
-                      items: 1
-                    },
-                    tablet: {
-                      breakpoint: { max: 1024, min: 464 },
-                      items: 2
-                    },
-                    mobile: {
-                      breakpoint: { max: 464, min: 0 },
-                      items: 1
-                    }
-                  }}
-                >
-                  {this.packDoctors(this.state.doctors, type.twoWeek).map(
-                    item => {
-                      return (
-                        <div>
-                          <Table bordered>
-                            <Thead
-                              type={type.twoWeek}
-                              beginDate={this.state.beginDate}
-                            />
-                            <Tbody
-                              id={null}
-                              type={type.twoWeek}
-                              beginDate={this.state.beginDate}
-                              doctors={item}
-                            />
-                          </Table>
-                        </div>
-                      );
-                    }
-                  )}
-                </Carousel>
-              </div>
-            </Route>
-            <Route path="/one-week">
-              <div className={"one-week"}>
-                <Carousel
-                  autoPlaySpeed={5000}
-                  autoPlay={false}
-                  arrows={false}
-                  responsive={{
-                    superLargeDesktop: {
-                      // the naming can be any, depends on you.
-                      breakpoint: { max: 4000, min: 3000 },
-                      items: 5
-                    },
-                    desktop: {
-                      breakpoint: { max: 3000, min: 1024 },
-                      items: 1
-                    },
-                    tablet: {
-                      breakpoint: { max: 1024, min: 464 },
-                      items: 2
-                    },
-                    mobile: {
-                      breakpoint: { max: 464, min: 0 },
-                      items: 1
-                    }
-                  }}
-                >
-                  {this.forcedСrutch(
-                    this.newPackDoctors(this.state.doctors, type.oneWeek)
-                  ).map((item, index) => {
-                    if (index % 2 === 0) {
-                      return (
-                        <div>
-                          <Table bordered>
-                            <Thead
-                              id={1}
-                              type={type.oneWeek}
-                              beginDate={this.state.beginDate}
-                            />
-                            <Tbody
-                              id={1}
-                              type={type.oneWeek}
-                              beginDate={this.state.beginDate}
-                              doctors={item}
-                            />
-                          </Table>
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <div>
-                          <Table bordered>
-                            <Thead
-                              id={2}
-                              type={type.oneWeek}
-                              beginDate={this.state.beginDate}
-                            />
-                            <Tbody
-                              id={2}
-                              type={type.oneWeek}
-                              beginDate={this.state.beginDate}
-                              doctors={item}
-                            />
-                          </Table>
-                        </div>
-                      );
-                    }
-                  })}
-                </Carousel>
-              </div>
-            </Route>
-            <Route path="/new-style">
-              <div className={"new-style"}>
-                <Carousel
-                  infinite={true}
-                  autoPlaySpeed={displayTime}
-                  autoPlay={true}
-                  arrows={false}
-                  responsive={{
-                    superLargeDesktop: {
-                      // the naming can be any, depends on you.
-                      breakpoint: { max: 4000, min: 3000 },
-                      items: 5
-                    },
-                    desktop: {
-                      breakpoint: { max: 3000, min: 1024 },
-                      items: 1
-                    },
-                    tablet: {
-                      breakpoint: { max: 1024, min: 464 },
-                      items: 2
-                    },
-                    mobile: {
-                      breakpoint: { max: 464, min: 0 },
-                      items: 1
-                    }
-                  }}
-                >
-                  {this.forcedСrutch(
-                    this.packDoctors(this.state.doctors, type.newStyle)
-                  ).map((item, index) => {
-                    if (index % 2 === 0) {
-                      return (
-                        <div>
-                          <Table bordered>
-                            <Thead
-                              id={1}
-                              type={type.newStyle}
-                              beginDate={this.state.beginDate}
-                            />
-                            <Tbody
-                              id={1}
-                              type={type.newStyle}
-                              beginDate={this.state.beginDate}
-                              doctors={item}
-                            />
-                          </Table>
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <div className={"new-style"}>
-                          <Table bordered>
-                            <Thead
-                              id={2}
-                              type={type.newStyle}
-                              beginDate={this.state.beginDate}
-                            />
-                            <Tbody
-                              id={2}
-                              type={type.newStyle}
-                              beginDate={this.state.beginDate}
-                              doctors={item}
-                            />
-                          </Table>
-                        </div>
-                      );
-                    }
-                  })}
-                </Carousel>
-              </div>
-            </Route>
-          </Switch>
-        </Router>
+        <div className={"one-week"}>
+          <Carousel
+            autoPlaySpeed={5000}
+            autoPlay={false}
+            arrows={false}
+            responsive={{
+              superLargeDesktop: {
+                breakpoint: { max: 4000, min: 3000 },
+                items: 5
+              },
+              desktop: {
+                breakpoint: { max: 3000, min: 1024 },
+                items: 1
+              }
+            }}
+          >
+            {this.forcedСrutch(
+              this.packDoctors(this.state.doctors, type.oneWeek)
+            ).map((item, index) => {
+              if (index % 2 === 0) {
+                return (
+                  <div>
+                    <Table bordered>
+                      <Thead
+                        id={1}
+                        type={type.oneWeek}
+                        beginDate={this.state.beginDate}
+                      />
+                      <Tbody
+                        id={1}
+                        type={type.oneWeek}
+                        beginDate={this.state.beginDate}
+                        doctors={item}
+                      />
+                    </Table>
+                  </div>
+                );
+              } else {
+                return (
+                  <div>
+                    <Table bordered>
+                      <Thead
+                        id={2}
+                        type={type.oneWeek}
+                        beginDate={this.state.beginDate}
+                      />
+                      <Tbody
+                        id={2}
+                        type={type.oneWeek}
+                        beginDate={this.state.beginDate}
+                        doctors={item}
+                      />
+                    </Table>
+                  </div>
+                );
+              }
+            })}
+          </Carousel>
+        </div>
       );
     } else {
       return null;
