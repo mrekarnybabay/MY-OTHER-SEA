@@ -9,7 +9,7 @@ import "react-multi-carousel/lib/styles.css";
 import Table from "react-bootstrap/Table";
 
 import type from "./const";
-import { host, api, GUID, BoardID, countString, displayTime } from "./config";
+import { host, api, GUID, BoardID, countString, displayTime, height } from "./config";
 
 import Tbody from "./Components/Tbody";
 import Thead from "./Components/Thead";
@@ -34,11 +34,11 @@ class App extends React.Component {
         BoardID: BoardID
       }
     })
-      .then(function(response) {
+      .then(function (response) {
         console.log("Получил ответ", response);
         responseFunction(response.data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("Ошибка! Не могу связаться с API. " + error);
       });
   };
@@ -131,6 +131,104 @@ class App extends React.Component {
               packs[curIndex][key] = [];
               packs[curIndex][key].push(categories[key][i]);
               curCount = 2;
+            }
+          }
+        }
+      }
+    } else if (typeStyle === type.newStyle) {
+      curCount = 0;
+      for (let k in array) {
+        let key = array[k];
+        for (let i = 0; i < categories[key].length; i++) {
+          if (packs[curIndex][key]) {
+            if (curCount < countString) {
+              packs[curIndex][key].push(categories[key][i]);
+              curCount++;
+            } else {
+              packs.push([]);
+              curIndex++;
+              packs[curIndex][key] = [];
+              packs[curIndex][key].push(categories[key][i]);
+              curCount = 1;
+            }
+          } else {
+            if (curCount + 1 <= countString) {
+              packs[curIndex][key] = [];
+              packs[curIndex][key].push(categories[key][i]);
+              curCount++;
+            } else {
+              packs.push([]);
+              curIndex++;
+              packs[curIndex][key] = [];
+              packs[curIndex][key].push(categories[key][i]);
+              curCount = 1;
+            }
+          }
+        }
+      }
+    }
+    console.log(packs);
+    return packs;
+  };
+  heightString = (doctor) => {
+    let maxRepeat = 1;
+
+    for (let i = 0; i < doctor.Shedule.length; i++) {
+      let countRepeat = 0;
+      let date1 = new Date(doctor.Shedule[i].Date)
+      for (let j = 0; j < doctor.Shedule.length; j++) {
+        let date2 = new Date(doctor.Shedule[j].Date)
+        if (date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth()) {
+          countRepeat++;
+        }
+      }
+      if(maxRepeat < countRepeat){
+        maxRepeat = countRepeat;
+      }
+    }
+    doctor.height = maxRepeat * 38 + 40;
+    return maxRepeat * 38 + 40;
+  }
+  newPackDoctors = (categories, typeStyle) => {
+    let packs = [];
+    let curIndex = 0;
+    let curCount = 0;
+
+    let curHeight = 0;
+
+    let array = this.sortCategories(categories);
+    packs.push([]);
+    curHeight = 60;
+
+    if (typeStyle === type.twoWeek || typeStyle === type.oneWeek) {
+      for (let k in array) {
+        let key = array[k];
+        for (let i = 0; i < categories[key].length; i++) {
+          if (packs[curIndex][key]) {
+            if (curHeight + this.heightString(categories[key][i]) < height) {
+              packs[curIndex][key].push(categories[key][i]);
+              curCount++;
+              curHeight += this.heightString(categories[key][i]);
+            } else {
+              curHeight = 60 + 40;
+              packs.push([]);
+              curIndex++;
+              packs[curIndex][key] = [];
+              packs[curIndex][key].push(categories[key][i]);
+              curHeight += this.heightString(categories[key][i]);
+            }
+          } else {
+            if (curHeight + this.heightString(categories[key][i]) + 40 <= height) {
+              packs[curIndex][key] = [];
+              packs[curIndex][key].push(categories[key][i]);
+              curHeight += this.heightString(categories[key][i]) + 40;
+            } else {
+              packs.push([]);
+              curIndex++;
+              packs[curIndex][key] = [];
+              packs[curIndex][key].push(categories[key][i]);
+              curHeight = 60 + 40;
+              curHeight += this.heightString(categories[key][i]);
             }
           }
         }
@@ -268,7 +366,7 @@ class App extends React.Component {
                   }}
                 >
                   {this.forcedСrutch(
-                    this.packDoctors(this.state.doctors, type.oneWeek)
+                    this.newPackDoctors(this.state.doctors, type.oneWeek)
                   ).map((item, index) => {
                     if (index % 2 === 0) {
                       return (

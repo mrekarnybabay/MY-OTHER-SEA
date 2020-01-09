@@ -81,7 +81,7 @@ export class TrDoctors extends React.Component {
       if (item !== null) {
         return (
           <td>
-            <div className={"td-shedule-doctor"}>
+            <div style={{height : this.props.doctor.height + "px"}} className={"td-shedule-doctor"}>
               {item.map(date => {
                 return (
                   <p>

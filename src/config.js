@@ -5,7 +5,7 @@ export const host = "http://localhost:12348";
 export const api = "/api/WorkerBoard/GetWorkersSchedule";
 
 // Настройки отображения
-export const countString = 13;
+export const countString = 12;
 export const displayTime = 5000;
 export const twoWeek = true;
 export const deleteEmptyStrings = false;
