@@ -186,7 +186,7 @@ class App extends React.Component {
         <div className={"one-week"}>
           <Carousel 
             ref={(el) => {
-              setInterval(() =>{el.next(); console.log(new Date())}, window.displayTime);
+              setInterval(() =>{el.next();}, window.displayTime);
             }}
             // autoPlaySpeed={100}
             // autoPlay={true}
