@@ -109,19 +109,18 @@ class App extends React.Component {
         maxRepeat = countRepeat;
       }
     }
-    doctor.height = maxRepeat * 38 + 40;
-    return maxRepeat * 38 + 40;
+    doctor.height = maxRepeat * window.heightDoctorShedule + window.heightPaddingDoctorShedule;
+    return maxRepeat * window.heightDoctorShedule + window.heightPaddingDoctorShedule;
   }
 
   packDoctors = (categories) => {
     let packs = [];
     let curIndex = 0;
-
     let curHeight = 0;
 
     let array = this.sortCategories(categories);
     packs.push([]);
-    curHeight = 60;
+    curHeight = window.heightDate;
 
     for (let k in array) {
       let key = array[k];
@@ -131,7 +130,7 @@ class App extends React.Component {
             packs[curIndex][key].push(categories[key][i]);
             curHeight += this.heightString(categories[key][i]);
           } else {
-            curHeight = 60 + 40;
+            curHeight = window.heightDate + window.heightNameCategory;
             packs.push([]);
             curIndex++;
             packs[curIndex][key] = [];
@@ -139,16 +138,16 @@ class App extends React.Component {
             curHeight += this.heightString(categories[key][i]);
           }
         } else {
-          if (curHeight + this.heightString(categories[key][i]) + 40 <= window.height) {
+          if (curHeight + this.heightString(categories[key][i]) + window.heightNameCategory <= window.height) {
             packs[curIndex][key] = [];
             packs[curIndex][key].push(categories[key][i]);
-            curHeight += this.heightString(categories[key][i]) + 40;
+            curHeight += this.heightString(categories[key][i]) + window.heightNameCategory;
           } else {
             packs.push([]);
             curIndex++;
             packs[curIndex][key] = [];
             packs[curIndex][key].push(categories[key][i]);
-            curHeight = 60 + 40;
+            curHeight = window.heightDate + window.heightNameCategory;
             curHeight += this.heightString(categories[key][i]);
           }
         }

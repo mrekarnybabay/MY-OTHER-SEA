@@ -6,5 +6,10 @@ window. api = "/api/WorkerBoard/GetWorkersSchedule";
 window. countString = 12;
 window.displayTime = 5000;
 
-window.height = 1080; // Высота монитора в пикселях
-window.heightString = 50;
+// Значения в пикселях
+window.height = 1080; 
+window.heightDate = 60;
+window.heightNameCategory = 40;
+window.heightDoctorShedule = 38;
+
+window.heightPaddingDoctorShedule = 40;
