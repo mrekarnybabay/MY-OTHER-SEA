@@ -189,6 +189,7 @@ class App extends React.Component {
             autoPlaySpeed={window.displayTime}
             autoPlay={true}
             arrows={false}
+            infinite={true}
             responsive={{
               superLargeDesktop: {
                 breakpoint: { max: 4000, min: 3000 },
