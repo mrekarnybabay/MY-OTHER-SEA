@@ -1,15 +1,10 @@
 import React from "react";
 import Axios from "axios";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import Table from "react-bootstrap/Table";
-
-import type from "./const";
-import { host, api, GUID, BoardID, countString, displayTime, height } from "./config";
 
 import Tbody from "./Components/Tbody";
 import Thead from "./Components/Thead";
@@ -27,10 +22,10 @@ class App extends React.Component {
 
   request = responseFunction => {
     console.log("Делаю запрос");
-    Axios.post(host + api, {
-      GUID: GUID,
+    Axios.post(window.host + window.api, {
+      GUID: window.GUID,
       Data: {
-        BoardID: BoardID
+        BoardID: window.BoardID
       }
     })
       .then(function (response) {
@@ -121,7 +116,6 @@ class App extends React.Component {
   packDoctors = (categories) => {
     let packs = [];
     let curIndex = 0;
-    let curCount = 0;
 
     let curHeight = 0;
 
@@ -133,9 +127,8 @@ class App extends React.Component {
       let key = array[k];
       for (let i = 0; i < categories[key].length; i++) {
         if (packs[curIndex][key]) {
-          if (curHeight + this.heightString(categories[key][i]) < height) {
+          if (curHeight + this.heightString(categories[key][i]) < window.height) {
             packs[curIndex][key].push(categories[key][i]);
-            curCount++;
             curHeight += this.heightString(categories[key][i]);
           } else {
             curHeight = 60 + 40;
@@ -146,7 +139,7 @@ class App extends React.Component {
             curHeight += this.heightString(categories[key][i]);
           }
         } else {
-          if (curHeight + this.heightString(categories[key][i]) + 40 <= height) {
+          if (curHeight + this.heightString(categories[key][i]) + 40 <= window.height) {
             packs[curIndex][key] = [];
             packs[curIndex][key].push(categories[key][i]);
             curHeight += this.heightString(categories[key][i]) + 40;
@@ -193,8 +186,8 @@ class App extends React.Component {
       return (
         <div className={"one-week"}>
           <Carousel
-            autoPlaySpeed={5000}
-            autoPlay={false}
+            autoPlaySpeed={window.displayTime}
+            autoPlay={true}
             arrows={false}
             responsive={{
               superLargeDesktop: {
@@ -208,7 +201,7 @@ class App extends React.Component {
             }}
           >
             {this.forcedСrutch(
-              this.packDoctors(this.state.doctors, type.oneWeek)
+              this.packDoctors(this.state.doctors)
             ).map((item, index) => {
               if (index % 2 === 0) {
                 return (
@@ -216,12 +209,10 @@ class App extends React.Component {
                     <Table bordered>
                       <Thead
                         id={1}
-                        type={type.oneWeek}
                         beginDate={this.state.beginDate}
                       />
                       <Tbody
                         id={1}
-                        type={type.oneWeek}
                         beginDate={this.state.beginDate}
                         doctors={item}
                       />
@@ -234,12 +225,10 @@ class App extends React.Component {
                     <Table bordered>
                       <Thead
                         id={2}
-                        type={type.oneWeek}
                         beginDate={this.state.beginDate}
                       />
                       <Tbody
                         id={2}
-                        type={type.oneWeek}
                         beginDate={this.state.beginDate}
                         doctors={item}
                       />
