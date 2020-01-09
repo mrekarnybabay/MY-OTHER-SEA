@@ -4,7 +4,7 @@ window.host = "http://localhost:12348";
 window. api = "/api/WorkerBoard/GetWorkersSchedule";
 
 window. countString = 12;
-window.displayTime = 5000;
+window.displayTime = 3000; // миллисекунды
 
 // Значения в пикселях
 window.height = 1080; 

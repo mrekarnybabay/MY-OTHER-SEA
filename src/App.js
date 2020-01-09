@@ -184,11 +184,15 @@ class App extends React.Component {
     if (this.state.doctors !== null) {
       return (
         <div className={"one-week"}>
-          <Carousel
-            autoPlaySpeed={window.displayTime}
-            autoPlay={true}
+          <Carousel 
+            ref={(el) => {
+              setInterval(() =>{el.next(); console.log(new Date())}, window.displayTime);
+            }}
+            // autoPlaySpeed={100}
+            // autoPlay={true}
             arrows={false}
             infinite={true}
+            // focusOnSelect={true}
             responsive={{
               superLargeDesktop: {
                 breakpoint: { max: 4000, min: 3000 },
