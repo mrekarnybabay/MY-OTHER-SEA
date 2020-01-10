@@ -27,7 +27,7 @@ class App extends React.Component {
       data: JSON.stringify(data),
       type: 'POST',
       crossDomain: true,
-      url: 'http://localhost:12348/api/WorkerBoard/GetWorkersSchedule',
+      url: window.host + window.api,
       success: (res) => { responseFunction(JSON.parse(res)) },
       error: (error) => { console.log("Ошибка! Не могу связаться с API. " + error); }
     });
