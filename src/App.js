@@ -9,6 +9,7 @@ import Table from "react-bootstrap/Table";
 import Tbody from "./Components/Tbody";
 import Thead from "./Components/Thead";
 import "./App.css";
+import $ from 'jquery';
 
 class App extends React.Component {
   constructor(props) {
@@ -22,19 +23,15 @@ class App extends React.Component {
 
   request = responseFunction => {
     console.log("Делаю запрос");
-    Axios.post(window.host + window.api, {
-      GUID: window.GUID,
-      Data: {
-        BoardID: window.BoardID
-      }
-    })
-      .then(function (response) {
-        console.log("Получил ответ", response);
-        responseFunction(response.data);
-      })
-      .catch(function (error) {
-        console.log("Ошибка! Не могу связаться с API. " + error);
-      });
+    var data = { GUID: window.GUID, Data: { BoardID: window.BoardID } };
+    $.ajax({
+      data: JSON.stringify(data),
+      type: 'POST',
+      crossDomain: true,
+      url: 'http://localhost:12348/api/WorkerBoard/GetWorkersSchedule',
+      success: (res) => { responseFunction(JSON.parse(res)) },
+      error: (error) => { console.log("Ошибка! Не могу связаться с API. " + error); }
+    });
   };
 
   response = doctors => {
@@ -184,9 +181,9 @@ class App extends React.Component {
     if (this.state.doctors !== null) {
       return (
         <div className={"one-week"}>
-          <Carousel 
+          <Carousel
             ref={(el) => {
-              setInterval(() =>{el.next();}, window.displayTime);
+              setInterval(() => { el.next(); }, window.displayTime);
             }}
             // autoPlaySpeed={100}
             // autoPlay={true}
