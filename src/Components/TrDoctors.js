@@ -88,7 +88,7 @@ export class TrDoctors extends React.Component {
   render() {
     return (
       <tr>
-        <td className={"Ты-хуйло-блять"}>
+        <td className={"firstCollumn"}>
           <div className={"td-name-doctor"}>
             <p>{this.getName()}</p>
           </div>

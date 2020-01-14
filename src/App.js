@@ -91,20 +91,38 @@ class App extends React.Component {
 
   heightString = (doctor) => {
     let maxRepeat = 1;
-
-    for (let i = 0; i < doctor.Shedule.length; i++) {
-      let countRepeat = 0;
-      let date1 = new Date(doctor.Shedule[i].Date)
-      for (let j = 0; j < doctor.Shedule.length; j++) {
-        let date2 = new Date(doctor.Shedule[j].Date)
-        if (date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth()) {
-          countRepeat++;
+    if (window.renderSecondWeek) {
+      for (let i = 0; i < doctor.Shedule.length; i++) {
+        let countRepeat = 0;
+        let date1 = new Date(doctor.Shedule[i].Date)
+        for (let j = 0; j < doctor.Shedule.length; j++) {
+          let date2 = new Date(doctor.Shedule[j].Date)
+          if (date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth()) {
+            countRepeat++;
+          }
+        }
+        if (maxRepeat < countRepeat) {
+          maxRepeat = countRepeat;
         }
       }
-      if (maxRepeat < countRepeat) {
-        maxRepeat = countRepeat;
+    } else {
+      for (let i = 0; i < doctor.Shedule.length; i++) {
+        let countRepeat = 0;
+        let date1 = new Date(doctor.Shedule[i].Date);
+        if(((date1 - this.state.beginDate) / 1000 / 60 / 60 / 24) < 7){
+          for (let j = 0; j < doctor.Shedule.length; j++) {
+            let date2 = new Date(doctor.Shedule[j].Date)
+            if (date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth()) {
+              countRepeat++;
+            }
+          }
+          if (maxRepeat < countRepeat) {
+            maxRepeat = countRepeat;
+          }
+        }
       }
     }
+
     doctor.height = maxRepeat * window.heightDoctorShedule + window.heightPaddingDoctorShedule;
     return maxRepeat * window.heightDoctorShedule + window.heightPaddingDoctorShedule;
   }
@@ -178,68 +196,110 @@ class App extends React.Component {
 
   render() {
     if (this.state.doctors !== null) {
-      return (
-        <div className={"one-week"}>
-          <Carousel
-            ref={(el) => {
-              setInterval(() => { el.next(); }, window.displayTime);
-            }}
-            // autoPlaySpeed={100}
-            // autoPlay={true}
-            arrows={false}
-            infinite={true}
-            // focusOnSelect={true}
-            responsive={{
-              superLargeDesktop: {
-                breakpoint: { max: 4000, min: 3000 },
-                items: 5
-              },
-              desktop: {
-                breakpoint: { max: 3000, min: 1024 },
-                items: 1
-              }
-            }}
-          >
-            {this.forcedСrutch(
-              this.packDoctors(this.state.doctors)
-            ).map((item, index) => {
-              if (index % 2 === 0) {
-                return (
-                  <div>
-                    <Table bordered>
-                      <Thead
-                        id={1}
-                        beginDate={this.state.beginDate}
-                      />
-                      <Tbody
-                        id={1}
-                        beginDate={this.state.beginDate}
-                        doctors={item}
-                      />
-                    </Table>
-                  </div>
-                );
-              } else {
-                return (
-                  <div>
-                    <Table bordered>
-                      <Thead
-                        id={2}
-                        beginDate={this.state.beginDate}
-                      />
-                      <Tbody
-                        id={2}
-                        beginDate={this.state.beginDate}
-                        doctors={item}
-                      />
-                    </Table>
-                  </div>
-                );
-              }
-            })}
-          </Carousel>
-        </div>
-      );
+      if (window.renderSecondWeek) {
+        return (
+          <div className={"one-week"}>
+            <Carousel
+              ref={(el) => {
+                setInterval(() => { el.next(); }, window.displayTime);
+              }}
+              arrows={false}
+              infinite={true}
+              responsive={{
+                superLargeDesktop: {
+                  breakpoint: { max: 4000, min: 3000 },
+                  items: 5
+                },
+                desktop: {
+                  breakpoint: { max: 3000, min: 1024 },
+                  items: 1
+                }
+              }}
+            >
+              {this.forcedСrutch(
+                this.packDoctors(this.state.doctors)
+              ).map((item, index) => {
+                if (index % 2 === 0) {
+                  return (
+                    <div>
+                      <Table bordered>
+                        <Thead
+                          id={1}
+                          beginDate={this.state.beginDate}
+                        />
+                        <Tbody
+                          id={1}
+                          beginDate={this.state.beginDate}
+                          doctors={item}
+                        />
+                      </Table>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div>
+                      <Table bordered>
+                        <Thead
+                          id={2}
+                          beginDate={this.state.beginDate}
+                        />
+                        <Tbody
+                          id={2}
+                          beginDate={this.state.beginDate}
+                          doctors={item}
+                        />
+                      </Table>
+                    </div>
+                  );
+                }
+              })}
+            </Carousel>
+          </div>
+        );
+      } else {
+        return (
+          <div className={"one-week"}>
+            <Carousel
+              ref={(el) => {
+                setInterval(() => { el.next(); }, window.displayTime);
+              }}
+              arrows={false}
+              infinite={true}
+              responsive={{
+                superLargeDesktop: {
+                  breakpoint: { max: 4000, min: 3000 },
+                  items: 5
+                },
+                desktop: {
+                  breakpoint: { max: 3000, min: 1024 },
+                  items: 1
+                }
+              }}
+            >
+              {
+                this.packDoctors(this.state.doctors)
+                  .map((item) => {
+                    return (
+                      <div>
+                        <Table bordered>
+                          <Thead
+                            id={1}
+                            beginDate={this.state.beginDate}
+                          />
+                          <Tbody
+                            id={1}
+                            beginDate={this.state.beginDate}
+                            doctors={item}
+                          />
+                        </Table>
+                      </div>
+                    );
+                  })}
+            </Carousel>
+          </div>
+        );
+      }
+
     } else {
       return null;
     }
