@@ -2,14 +2,20 @@ import React from "react";
 
 export class TrDoctors extends React.Component {
   getName = () => {
-    return (
-      this.props.doctor.Surname +
-      " " +
-      this.props.doctor.Name[0] +
-      ". " +
-      this.props.doctor.Patronimic[0] +
-      "."
-    );
+    if (this.props.doctor.Name[0] === null && this.props.doctor.Patronimic[0] === null) {
+      return (
+        this.props.doctor.Surname
+      );
+    } else {
+      return (
+        this.props.doctor.Surname +
+        " " +
+        this.props.doctor.Name[0] +
+        ". " +
+        this.props.doctor.Patronimic[0] +
+        "."
+      );
+    }
   };
 
   getTime = timeString => {
