@@ -9,15 +9,19 @@ import Tbody from "./Components/Tbody";
 import Thead from "./Components/Thead";
 import "./App.css";
 import $ from 'jquery';
+import { CarouselItem } from "react-bootstrap";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       doctors: null,
-      beginDate: null
+      beginDate: null,
     };
     this.request(this.response);
+    this.count = 0;
+    this.countPage = 0;
+    this.idTimer = 0;
   }
 
   request = responseFunction => {
@@ -109,7 +113,7 @@ class App extends React.Component {
       for (let i = 0; i < doctor.Shedule.length; i++) {
         let countRepeat = 0;
         let date1 = new Date(doctor.Shedule[i].Date);
-        if(((date1 - this.state.beginDate) / 1000 / 60 / 60 / 24) < 7){
+        if (((date1 - this.state.beginDate) / 1000 / 60 / 60 / 24) < 7) {
           for (let j = 0; j < doctor.Shedule.length; j++) {
             let date2 = new Date(doctor.Shedule[j].Date)
             if (date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth()) {
@@ -167,6 +171,7 @@ class App extends React.Component {
         }
       }
     }
+    this.countPage = packs.length;
     console.log(packs);
     return packs;
   };
@@ -200,9 +205,23 @@ class App extends React.Component {
         return (
           <div className={"one-week"}>
             <Carousel
-              ref={(el) => {
-                setInterval(() => { el.next(); }, window.displayTime);
-              }}
+              ref={
+                (el) => {
+                  let app = this;
+                  app.count = 1;
+                  let id = setTimeout(function Next() {
+                    if (el !== null) {
+                      el.next();
+                      if (app.count === (app.countPage - 1) * window.countCycles) {
+                        app.request(app.response);
+                      } else {
+                        id = setTimeout(Next, window.displayTime);
+                        app.count++;
+                      }
+                    }
+                  }, window.displayTime);
+                }
+              }
               arrows={false}
               infinite={true}
               responsive={{
@@ -260,9 +279,23 @@ class App extends React.Component {
         return (
           <div className={"one-week"}>
             <Carousel
-              ref={(el) => {
-                setInterval(() => { el.next(); }, window.displayTime);
-              }}
+              ref={
+                (el) => {
+                  let app = this;
+                  app.count = 1;
+                  let id = setTimeout(function Next() {
+                    if (el !== null) {
+                      el.next();
+                      if (app.count === (app.countPage - 1) * window.countCycles) {
+                        app.request(app.response);
+                      } else {
+                        id = setTimeout(Next, window.displayTime);
+                        app.count++;
+                      }
+                    }
+                  }, window.displayTime);
+                }
+              }
               arrows={false}
               infinite={true}
               responsive={{
@@ -296,7 +329,7 @@ class App extends React.Component {
                     );
                   })}
             </Carousel>
-          </div>
+          </div >
         );
       }
 
