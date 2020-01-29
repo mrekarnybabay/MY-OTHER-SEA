@@ -9,7 +9,6 @@ import Tbody from "./Components/Tbody";
 import Thead from "./Components/Thead";
 import "./App.css";
 import $ from 'jquery';
-import { CarouselItem } from "react-bootstrap";
 
 class App extends React.Component {
   constructor(props) {
@@ -25,7 +24,7 @@ class App extends React.Component {
   }
 
   request = responseFunction => {
-    console.log("Делаю запрос");
+    // console.log("Делаю запрос");
     var data = { GUID: window.GUID, Data: { BoardID: window.BoardID } };
     $.ajax({
       data: JSON.stringify(data),
@@ -172,7 +171,7 @@ class App extends React.Component {
       }
     }
     this.countPage = packs.length;
-    console.log(packs);
+    // console.log(packs);
     return packs;
   };
 
