@@ -5,7 +5,7 @@ window.api = "/api/WorkerBoard/GetWorkersSchedule";
 
 window.countCycles = 2; // кол-во полных циклов
 window.displayTime = 5000; // миллисекунды
-
+window.renderSecondWeek = false;
 
 // Значения в пикселях
 window.height = 1080;
