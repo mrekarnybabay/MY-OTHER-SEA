@@ -1,27 +1,27 @@
 import React from "react";
 
 class Thead extends React.Component {
-  dayOfWeek = (day) => {
+  dayOfWeek = day => {
     let numberDay = day.getDay();
     switch (numberDay) {
       case 0:
-        return ("Вс");
+        return "Вс";
       case 1:
-        return ("Пн");
+        return "Пн";
       case 2:
-        return ("Вт");
+        return "Вт";
       case 3:
-        return ("Ср");
+        return "Ср";
       case 4:
-        return ("Чт");
+        return "Чт";
       case 5:
-        return ("Пт");
+        return "Пт";
       case 6:
-        return ("Сб");
+        return "Сб";
       default:
-        return ("Ошибка");
+        return "Ошибка";
     }
-  }
+  };
   render() {
     return (
       <thead>
@@ -38,12 +38,14 @@ class Thead extends React.Component {
             return (
               <th key={index} scope="col">
                 <div className={"date"}>
-                ({this.dayOfWeek(item)})
-                  {item.toLocaleString("ru", {
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric"
-                  })}
+                  <div class="dayOfWeek">{this.dayOfWeek(item)}</div>
+                  <div class="numberDay">
+                    {item.toLocaleString("ru", {
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric"
+                    })}{" "}
+                  </div>
                 </div>
               </th>
             );
