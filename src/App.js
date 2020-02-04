@@ -203,6 +203,9 @@ class App extends React.Component {
       if (window.renderSecondWeek) {
         return (
           <div className={"one-week"}>
+            <div class="header-top">
+              Расписание приёма врачей
+          </div>
             <Carousel
               ref={
                 (el) => {
@@ -277,6 +280,9 @@ class App extends React.Component {
       } else {
         return (
           <div className={"one-week"}>
+            <div class="header-top">
+              Расписание приёма врачей
+        </div>
             <Carousel
               ref={
                 (el) => {
