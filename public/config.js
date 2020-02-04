@@ -9,7 +9,7 @@ window.renderSecondWeek = false;
 
 // Значения в пикселях
 window.height = 1080;
-window.heightDate = 60;
+window.heightDate = 60 + 68;
 window.heightNameCategory = 40;
 window.heightDoctorShedule = 38;
 window.heightPaddingDoctorShedule = 40;
