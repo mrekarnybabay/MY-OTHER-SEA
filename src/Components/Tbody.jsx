@@ -16,7 +16,7 @@ function Tbody(props) {
                             />
                             {
                                 props.doctors[item].map((doctor) => {
-                                    return (    
+                                    return (
                                         <TrDoctors
                                             id={props.id}
                                             type={props.type}

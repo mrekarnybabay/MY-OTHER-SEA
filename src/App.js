@@ -21,10 +21,10 @@ class App extends React.Component {
     this.count = 0;
     this.countPage = 0;
     this.idTimer = 0;
+    this.beginWeekDate = 0;
   }
 
   request = responseFunction => {
-    // console.log("Делаю запрос");
     var data = { GUID: window.GUID, Data: { BoardID: window.BoardID } };
     $.ajax({
       data: JSON.stringify(data),
@@ -37,6 +37,10 @@ class App extends React.Component {
   };
 
   response = doctors => {
+    this.setState({
+      doctors: null,
+      beginDate: null
+    });
     this.groupingDoctors(doctors);
   };
 
@@ -171,7 +175,6 @@ class App extends React.Component {
       }
     }
     this.countPage = packs.length;
-    // console.log(packs);
     return packs;
   };
 
@@ -180,6 +183,7 @@ class App extends React.Component {
     let beginDate = this.state.beginDate;
 
     if (beginDate === null || beginDate > newDate) {
+      this.beginWeekDate = newDate;
       this.setState({
         beginDate: newDate
       });
@@ -288,11 +292,27 @@ class App extends React.Component {
                 (el) => {
                   let app = this;
                   app.count = 1;
-                  let id = setTimeout(function Next() {
+                  var id = setTimeout(function Next() {
                     if (el !== null) {
                       el.next();
-                      if (app.count === (app.countPage - 1) * window.countCycles) {
-                        app.request(app.response);
+                      console.log("beginDate = ", app.beginWeekDate);
+                      console.log('Сборка №7');
+                      console.log(app.count % app.countPage, "===", app.countPage - 1);
+                      console.log(app.count, "===", app.countPage * window.countCycles - 1);
+                      console.log(((Date.now() - app.beginWeekDate) / 1000 / 60 / 60 / 24));
+                      if (app.count % app.countPage === app.countPage - 1) {
+                        console.log("Зашел в проверку");
+                        if(app.count === app.countPage * window.countCycles - 1){
+                          console.log('Делаю запрос');
+                          app.request(app.response);
+                        } else if((Date.now() - app.beginWeekDate) / 1000 / 60 / 60 / 24 >= 7){
+                          console.log('Делаю запрос(Вермя)');
+                          app.request(app.response);
+                        }
+                        else{
+                          id = setTimeout(Next, window.displayTime);
+                          app.count++;
+                        }
                       } else {
                         id = setTimeout(Next, window.displayTime);
                         app.count++;
